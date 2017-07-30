@@ -1,0 +1,29 @@
+{
+    "name": "peterq/ez-swoole",
+    "description": "a swoole wrapper layer",
+    "type": "library",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "PeterQ",
+            "email": "me@peterq.cn"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^6.2"
+    },
+    "require": {
+        "symfony/var-dumper": "^3.3",
+        "react/promise": "^2.5",
+        "ext-swoole": ">2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "EzSwoole\\": "src/EzSwoole/"
+        },
+        "files": [
+            "src/EzSwoole/Common/helpers.php",
+            "src/EzSwoole/Common/consts.php"
+        ]
+    }
+}
