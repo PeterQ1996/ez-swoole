@@ -21,5 +21,6 @@ class Request {
         $this->cookie = $arr['cookie'];
         $this->server = $arr['server'];
         $this->path = explode('?',$arr['server']['REQUEST_URI'])[0];
+        $this->header = $arr['header'];
     }
 }

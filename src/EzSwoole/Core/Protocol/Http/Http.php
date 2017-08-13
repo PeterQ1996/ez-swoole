@@ -104,6 +104,7 @@ class Http implements \EzSwoole\Core\Protocol\ProtocolContract
 
         $http_post_boundary = '';
         unset($header_data[0]);
+        $headers = [];
         foreach ($header_data as $content) {
             // \r\n\r\n
             if (empty($content)) {
@@ -113,6 +114,7 @@ class Http implements \EzSwoole\Core\Protocol\ProtocolContract
             $key                     = str_replace('-', '_', strtoupper($key));
             $value                   = trim($value);
             $_SERVER['HTTP_' . $key] = $value;
+            $headers[$key] = $value;
             switch ($key) {
                 // HTTP_HOST
                 case 'HOST':
@@ -178,7 +180,7 @@ class Http implements \EzSwoole\Core\Protocol\ProtocolContract
         // $_SERVER['REMOTE_ADDR'] = $connection->getRemoteIp();
         // $_SERVER['REMOTE_PORT'] = $connection->getRemotePort();
 
-        return array('get' => $_GET, 'post' => $_POST, 'cookie' => $_COOKIE, 'server' => $_SERVER, 'files' => $_FILES);
+        return array('get' => $_GET, 'post' => $_POST, 'cookie' => $_COOKIE, 'server' => $_SERVER, 'files' => $_FILES, 'header'=>$headers);
     }
 
     /**
