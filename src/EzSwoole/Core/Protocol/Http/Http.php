@@ -64,7 +64,7 @@ class Http implements \EzSwoole\Core\Protocol\ProtocolContract
     /**
      * Parse $_POST、$_GET、$_COOKIE.
      *
-     * @param string        $buffer
+     * @param string $buffer
      * @return array
      */
     public static function decode($buffer)
