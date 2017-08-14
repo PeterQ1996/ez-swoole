@@ -12,6 +12,8 @@ class Server {
 
     protected static $this;
 
+    protected static $fromPort = false;
+
     protected $_settings = [
         'worker_num' => 2,
         'reactor_num' => 4,
@@ -24,12 +26,16 @@ class Server {
     public function __construct($host, $port, $mode = SWOOLE_PROCESS,
                                 $sock_type = SWOOLE_SOCK_TCP, $settings = [])
     {
-        if(static::$this)
-            throw new \Error("you can create only one server in an application");
-        $this->_server = new SwooleServer($host, $port);
-        $this->_settings = array_merge($this->_settings, $settings);
-        $this->_server->set($this->_settings);
-        static::$this = $this;
+        if (static::$fromPort) {
+            $this->_server = $host;
+        } else {
+            if(static::$this)
+                throw new \Error("you can create only one server in an application");
+            $this->_server = new SwooleServer($host, $port);
+            $this->_settings = array_merge($this->_settings, $settings);
+            $this->_server->set($this->_settings);
+            static::$this = $this;
+        }
     }
 
     public function run(){
@@ -70,6 +76,13 @@ class Server {
     public static function getInstance()
     {
         return static::$this;
+    }
+
+    public static function fromPort ($port) {
+        static::$fromPort = true;
+        $server = new static($port, 0);
+        static::$fromPort = false;
+        return $server;
     }
 
 }

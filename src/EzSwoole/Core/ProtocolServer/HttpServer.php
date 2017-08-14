@@ -16,9 +16,9 @@ class HttpServer extends ServerWithProtocol {
     {
         parent::__construct($host, $port, $mode, $sock_type, $settings);
 
-        $this->onPacket(function($fd, $packet) {
+        $this->onPacket(function($fd, $packet, $server) {
             $request = new Request($packet);
-            $response = new Response($this->_server, $fd);
+            $response = new Response($server, $fd);
             ($this->requestCb)($request,  $response);
         });
     }
@@ -26,6 +26,7 @@ class HttpServer extends ServerWithProtocol {
     public function onRequest($cb){
         $this->requestCb = $cb;
     }
+
 
 
 }

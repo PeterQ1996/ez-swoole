@@ -28,9 +28,9 @@ class ServerWithProtocol extends Server {
         $this->packetHandler = $cb;
     }
 
-    protected function dispatchPacket ($fd, $packet) {
+    protected function dispatchPacket ($fd, $packet, $server) {
         $data =(static::$protocol)::decode($packet);
-        ($this->packetHandler)($fd, $data);
+        ($this->packetHandler)($fd, $data, $server);
     }
 
     public function onClose(\swoole_server $server, int $fd, int $reactorId) {
@@ -58,17 +58,19 @@ class ServerWithProtocol extends Server {
                 $left = $buffer->read($length, $buffer->length - $length);
                 $buffer->clear();
                 $buffer->append($left);
-                $this->dispatchPacket($fd, $packet);
+                $this->dispatchPacket($fd, $packet,$server);
             }
         } else{
             $length = (static::$protocol)::input($data);
             if ($length > 0) {
-                $this->dispatchPacket($fd, $data);
+                $this->dispatchPacket($fd, $data,$server);
                 return;
             }
             $buffer = $this->buffer->distributeBuffer($bufferKey);
             $buffer->append($data);
         }
     }
+
+
 }
 
