@@ -57,12 +57,12 @@ class ServerWithProtocol extends Server {
                 $packet = $buffer->read(0, $length);
                 $left = $buffer->read($length, $buffer->length - $length);
                 $buffer->clear();
-                $buffer->append($left);
+                if ($left != '') $buffer->append($left);
                 $this->dispatchPacket($fd, $packet,$server);
             }
         } else{
             $length = (static::$protocol)::input($data);
-            if ($length > 0) {
+            if ($length > 0 && strlen($data) >= $length) {
                 $this->dispatchPacket($fd, $data,$server);
                 return;
             }

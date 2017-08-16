@@ -147,15 +147,19 @@ class Http implements \EzSwoole\Core\Protocol\ProtocolContract
             }
         }
 
+
         // Parse $_POST.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_SERVER['CONTENT_TYPE'])) {
-                switch ($_SERVER['CONTENT_TYPE']) {
+                switch (explode(';', $_SERVER['CONTENT_TYPE'])[0]) {
                     case 'multipart/form-data':
                         self::parseUploadFiles($http_body, $http_post_boundary);
                         break;
                     case 'application/x-www-form-urlencoded':
                         parse_str($http_body, $_POST);
+                        break;
+                    case 'application/json':
+                        $_POST = json_decode($http_body, !0);
                         break;
                 }
             }
